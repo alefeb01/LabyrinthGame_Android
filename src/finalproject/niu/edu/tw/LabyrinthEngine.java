@@ -44,10 +44,10 @@ public class LabyrinthEngine {
 
     // labyrinth
     private List<Bloc> mBlocks = null;
-    private Portal mPortals[] = null;
-    private Gate mGates[] = null;
-	private Bloc Portals[][] = null;
-    private Bloc Gates[][] = null;
+//    private Portal mPortals[] = null;
+//    private Gate mGates[] = null;
+//	private Bloc Portals[][] = null;
+//    private Bloc Gates[][] = null;
 
     private LabyrinthActivity mActivity = null;
 
@@ -87,13 +87,13 @@ public class LabyrinthEngine {
                             mActivity.showDialog(LabyrinthActivity.DEFEAT_DIALOG);
                               break;
                         case PORTAL:
-                        	
-                        	if(block.equals(mPortals[block.getNum()].getB_in()))
-                        	{
-                        		getmBall().useStarGate(mPortals[block.getNum()], 0);
-                        	}else{
-                        		getmBall().useStarGate(mPortals[block.getNum()], 1);
-                        	}
+//                        	
+//                        	if(block.equals(mPortals[block.getNum()].getB_in()))
+//                        	{
+//                        		getmBall().useStarGate(mPortals[block.getNum()], 0);
+//                        	}else{
+//                        		getmBall().useStarGate(mPortals[block.getNum()], 1);
+//                        	}
                         	break;
                         case GATE: 
                         	//Rebound
@@ -101,10 +101,10 @@ public class LabyrinthEngine {
                             break;
                         case TRIGGER: 
                         	//Rebound	
-                        	if(mGates[block.getNum()].isActive()){
-                        		Toast.makeText(mActivity, "OpenGate", Toast.LENGTH_SHORT).show();		
-                            	getmBall().openGate(mGates[block.getNum()]);
-                        	}
+//                        	if(mGates[block.getNum()].isActive()){
+//                        		Toast.makeText(mActivity, "OpenGate", Toast.LENGTH_SHORT).show();		
+//                            	getmBall().openGate(mGates[block.getNum()]);
+//                        	}
                             break;
                         }
                     }
@@ -121,16 +121,16 @@ public class LabyrinthEngine {
         mActivity = pView;
         mManager = (SensorManager) mActivity.getBaseContext().getSystemService(Service.SENSOR_SERVICE);
         mAccelerometre = mManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        Gates = new Bloc[MAX_GATE_NUMBER][2];
-        Portals = new Bloc[MAX_PORTAL_NUMBER][2];
-        mPortals = new Portal[MAX_GATE_NUMBER];
-        mGates = new Gate[MAX_GATE_NUMBER];
-        for(int i = 0 ; i< MAX_PORTAL_NUMBER;i++)
-        {
-        	Portals[i][0]= new Bloc();
-        	Gates[i][0]= new Bloc();
-        	Gates[i][1]= new Bloc();
-        }
+//        Gates = new Bloc[MAX_GATE_NUMBER][2];
+//        Portals = new Bloc[MAX_PORTAL_NUMBER][2];
+//        mPortals = new Portal[MAX_GATE_NUMBER];
+//        mGates = new Gate[MAX_GATE_NUMBER];
+//        for(int i = 0 ; i< MAX_PORTAL_NUMBER;i++)
+//        {
+//        	Portals[i][0]= new Bloc();
+//        	Gates[i][0]= new Bloc();
+//        	Gates[i][1]= new Bloc();
+//        }
     }
 
     // reset ball position
@@ -203,34 +203,34 @@ public class LabyrinthEngine {
             	bloc = new Bloc(Type.ARRIVE, tabi, tabj, REBOUND_0);
               
             }else if((char) c == 'p'){
-        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
-                bloc = new Bloc(Type.PORTAL, tabi, tabj, (byte) Character.getNumericValue(reader.read()));   
-                bloc.setNum(Character.getNumericValue(reader.read()));
-                if(Portals[bloc.getNum()][0].getNum() == -1){
-                	  Portals[bloc.getNum()][0] = bloc;
-                }else{Portals[bloc.getNum()][1] = bloc;
-                	mPortals[bloc.getNum()] = new Portal(Portals[bloc.getNum()][0],Portals[bloc.getNum()][1]);
-                }
+//        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+//                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
+//                bloc = new Bloc(Type.PORTAL, tabi, tabj, (byte) Character.getNumericValue(reader.read()));   
+//                bloc.setNum(Character.getNumericValue(reader.read()));
+//                if(Portals[bloc.getNum()][0].getNum() == -1){
+//                	  Portals[bloc.getNum()][0] = bloc;
+//                }else{Portals[bloc.getNum()][1] = bloc;
+//                	mPortals[bloc.getNum()] = new Portal(Portals[bloc.getNum()][0],Portals[bloc.getNum()][1]);
+//                }
               
             }else if((char) c == 'g'){
-            		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-                    if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
-                    bloc = new Bloc(Type.GATE, tabi, tabj, (byte) Character.getNumericValue(reader.read()));   
-                    bloc.setNum(Character.getNumericValue(reader.read()));
-                    Gates[bloc.getNum()][0] = bloc;
-                    if(Gates[bloc.getNum()][1].getNum() != -1){
-                    	mGates[bloc.getNum()] = new Gate(Gates[bloc.getNum()][0],Gates[bloc.getNum()][1]);
-                    }
+//            		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+//                    if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
+//                    bloc = new Bloc(Type.GATE, tabi, tabj, (byte) Character.getNumericValue(reader.read()));   
+//                    bloc.setNum(Character.getNumericValue(reader.read()));
+//                    Gates[bloc.getNum()][0] = bloc;
+//                    if(Gates[bloc.getNum()][1].getNum() != -1){
+//                    	mGates[bloc.getNum()] = new Gate(Gates[bloc.getNum()][0],Gates[bloc.getNum()][1]);
+//                    }
             }else if((char) c == 't'){
-        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
-                bloc = new Bloc(Type.TRIGGER, tabi, tabj, REBOUND_0);   
-                bloc.setNum(Character.getNumericValue(reader.read()));
-                Gates[bloc.getNum()][1] = bloc;
-                if(Gates[bloc.getNum()][0].getNum() != -1){
-                	mGates[bloc.getNum()] = new Gate(Gates[bloc.getNum()][0],Gates[bloc.getNum()][1]);
-                }
+//        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+//                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
+//                bloc = new Bloc(Type.TRIGGER, tabi, tabj, REBOUND_0);   
+//                bloc.setNum(Character.getNumericValue(reader.read()));
+//                Gates[bloc.getNum()][1] = bloc;
+//                if(Gates[bloc.getNum()][0].getNum() != -1){
+//                	mGates[bloc.getNum()] = new Gate(Gates[bloc.getNum()][0],Gates[bloc.getNum()][1]);
+//                }
             }else if ((char) c == '\n') {
               // Change line!
               tabi = -1;

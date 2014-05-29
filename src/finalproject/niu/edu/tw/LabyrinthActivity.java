@@ -249,37 +249,6 @@ public class LabyrinthActivity extends Activity {
         mView.setBlocks(mList);
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        // modify by ken 2014.04.29 ********************************
-//        mView = new LabyrinthView(this);	// your game area
-//        Button btn = new Button(this);	// create button
-//        btn.setText("Button");
-//        btn.setOnClickListener(new Button.OnClickListener() {
-//			
-//			public void onClick(View v) {
-//				Toast.makeText(LabyrinthActivity.this, "Button be clicked", Toast.LENGTH_SHORT).show();
-//			}
-//		});
-//        
-//        LinearLayout layout = new LinearLayout(this);	// create layout mode
-//        layout.setOrientation(0);	// LinearLayout by horizontal
-//        layout.addView(mView, 720, 480);	// set your game screen size
-//        layout.addView(btn, 200, 50);	// set your button size
-//        
-//        setContentView(layout);
-//        // end modify by ken 2014.04.29 ********************************
-//
-//        mEngine = new LabyrinthEngine(this);
-//        Ball b = new Ball();
-//        mView.setBall(b);
-//        mEngine.setBall(b);
-//
-//        List<Bloc> mList = mEngine.buildLabyrinthe();
-//        mView.setBlocks(mList);
-//    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -380,6 +349,7 @@ public class LabyrinthActivity extends Activity {
 	                    editor.commit();
 	                    mEngine.reset();
 	                    mEngine.stop();
+	                    LabyrinthActivity.this.recreate();
                     }
                 }
             });

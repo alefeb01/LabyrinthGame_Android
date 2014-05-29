@@ -66,21 +66,11 @@ public class Bloc {
 	        	break;
 	        case GATE:
 	        	this.mCouleur = Color.BLACK;
-	        	if(rebound == 4||rebound == 8){
-	        		this.mRectangle = new RectF((pX-1) * SIZE, pY * SIZE, (pX + 2) * SIZE, (pY +1) * SIZE);
-	        		rebound = 12;
-	        	}else{
-	        		this.mRectangle = new RectF(pX * SIZE, (pY-1) * SIZE, (pX + 1) * SIZE, (pY +2) * SIZE);
-	        		rebound = 3;
-	        	}
+	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
 	        	break;
 	        case PORTAL:
 	        	this.mCouleur = Color.MAGENTA;
-	        	if(rebound == 4||rebound == 8){
-	        		this.mRectangle = new RectF((pX-1) * SIZE, pY * SIZE, (pX + 2) * SIZE, (pY +1) * SIZE);
-	        	}else{
-	        		this.mRectangle = new RectF(pX * SIZE, (pY-1) * SIZE, (pX + 1) * SIZE, (pY +2) * SIZE);
-	        	}
+	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
 	        	break;
         }
 
