@@ -43,7 +43,7 @@ public class LabyrinthEngine {
     private List<Bloc> mBlocks = null;
     private Portal mPortals[] = null;
  //   private Gate mGates[] = null;
-	private Bloc[][][] Portals = null;
+
 //    private Bloc Gates[][] = null;
 
     private LabyrinthActivity mActivity = null;
@@ -121,19 +121,10 @@ public class LabyrinthEngine {
         mManager = (SensorManager) mActivity.getBaseContext().getSystemService(Service.SENSOR_SERVICE);
         mAccelerometre = mManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 //        Gates = new Bloc[MAX_GATE_NUMBER][2];
-          Portals = new Bloc[MAX_PORTAL_NUMBER][2][Door.LENGHT_MAX];
+
           mPortals = new Portal[MAX_GATE_NUMBER];
 //        mGates = new Gate[MAX_GATE_NUMBER];
-        for(int i = 0 ; i< MAX_PORTAL_NUMBER;i++)
-        {
-        	for(int j = 0 ; j< Door.LENGHT_MAX;j++)
-        	{
-            	Portals[i][0][j]= new Bloc();
-            	Portals[i][1][j]= new Bloc();
-        	}
-//        	Gates[i][0]= new Bloc();
-//        	Gates[i][1]= new Bloc();
-        }
+
     }
 
     // reset ball position
@@ -161,7 +152,18 @@ public class LabyrinthEngine {
         	InputStream is = mActivity.getAssets().open(sLabX);
         	input = new InputStreamReader(is, Charset.forName("UTF-8"));
           reader = new BufferedReader(input);
-          
+      	  Bloc[][][] Portals = null;
+          Portals = new Bloc[MAX_PORTAL_NUMBER][2][Door.LENGHT_MAX];
+          for(int i = 0 ; i< MAX_PORTAL_NUMBER;i++)
+          {
+          	for(int j = 0 ; j< Door.LENGHT_MAX;j++)
+          	{
+              	Portals[i][0][j]= new Bloc();
+              	Portals[i][1][j]= new Bloc();
+          	}
+//          	Gates[i][0]= new Bloc();
+//          	Gates[i][1]= new Bloc();
+          }
           //table index
           int tabi = 0;
           int tabj = 0;
