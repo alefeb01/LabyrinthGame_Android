@@ -1,4 +1,6 @@
 package finalproject.niu.edu.tw;
+import java.util.List;
+
 import android.graphics.Color;
 import android.graphics.RectF;
 
@@ -9,10 +11,14 @@ public class Bloc {
     enum  Type { BORDURE, START, ARRIVE, HOLE, NEUTRAL, PORTAL,TRIGGER,GATE};
     
     private float SIZE = Ball.R * 2;
+    
+    private boolean solid = false;
+    private int doorside = 0;
     private boolean Rebound_Top = false;
     private boolean Rebound_Bottom = false;
     private boolean Rebound_Left = false;
     private boolean Rebound_Right = false;
+    
     private int num = 0;
     private Type mType = null;
     private RectF mRectangle = null;
@@ -43,6 +49,7 @@ public class Bloc {
 	        case BORDURE:
 	        	this.mCouleur = Color.BLACK;
 	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
+	        	this.setSolid(true);
 	        	break;
 	        case HOLE:
 	        	this.mCouleur = Color.GREEN;
@@ -66,11 +73,13 @@ public class Bloc {
 	        	break;
 	        case GATE:
 	        	this.mCouleur = Color.BLACK;
-	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
+	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE);
+	        	this.setSolid(true);
 	        	break;
 	        case PORTAL:
 	        	this.mCouleur = Color.MAGENTA;
 	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
+	        	this.setNum(rebound);
 	        	break;
         }
 
@@ -89,7 +98,39 @@ public class Bloc {
 		// TODO Auto-generated constructor stub
 		this.num = -1;
 	}
-
+	//return the size of array bloc
+	public int lenght(Bloc[] b)
+	{
+		int count = 0;
+		for (int i=0; i<b.length; i++)
+		{
+			if(b[i].getNum()!=-1){
+				count++;
+			}
+		}
+		return count;
+	}
+	public int lenght(List<Bloc> b)
+	{
+		return b.size();
+	}
+	
+	public boolean isin( Bloc[] lb ) {
+	    for (  Bloc b : lb )
+	    {
+	        if ( b == this )
+	        { return true;}
+	    }
+	    return false;
+	}
+	public boolean isin( List<Bloc> lb ) {
+	    for (  Bloc b : lb )
+	    {
+	        if ( b == this )
+	        { return true;}
+	    }
+	    return false;
+	}
 	public boolean isRebound_Right() {
 		return Rebound_Right;
 	}
@@ -128,5 +169,21 @@ public class Bloc {
 
 	public void setNum(int num) {
 		this.num = num;
+	}
+
+	public boolean isSolid() {
+		return solid;
+	}
+
+	public void setSolid(boolean solid) {
+		this.solid = solid;
+	}
+
+	public int getDoorside() {
+		return doorside;
+	}
+
+	public void setDoorside(int doorside) {
+		this.doorside = doorside;
 	}
 }

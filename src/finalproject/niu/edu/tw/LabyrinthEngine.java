@@ -10,7 +10,7 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.util.Log;
 import finalproject.niu.edu.tw.Bloc.Type;
 import android.app.Service;
 import android.graphics.RectF;
@@ -18,9 +18,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.Toast;
 
 
 public class LabyrinthEngine {
@@ -30,7 +27,7 @@ public class LabyrinthEngine {
 	public static final byte REBOUND_T = 4;
 	public static final byte REBOUND_B = 8;
 	public static final int I_SIZE = 13;
-	public static final int J_SIZE = 19;
+	public static final int J_SIZE = 22;
 	public static final int MAX_GATE_NUMBER = 5;
 	public static final int MAX_PORTAL_NUMBER = 5;
     private Ball mBall = null;
@@ -44,9 +41,9 @@ public class LabyrinthEngine {
 
     // labyrinth
     private List<Bloc> mBlocks = null;
-//    private Portal mPortals[] = null;
-//    private Gate mGates[] = null;
-//	private Bloc Portals[][] = null;
+    private Portal mPortals[] = null;
+ //   private Gate mGates[] = null;
+	private Bloc[][][] Portals = null;
 //    private Bloc Gates[][] = null;
 
     private LabyrinthActivity mActivity = null;
@@ -87,13 +84,15 @@ public class LabyrinthEngine {
                             mActivity.showDialog(LabyrinthActivity.DEFEAT_DIALOG);
                               break;
                         case PORTAL:
-//                        	
-//                        	if(block.equals(mPortals[block.getNum()].getB_in()))
-//                        	{
-//                        		getmBall().useStarGate(mPortals[block.getNum()], 0);
-//                        	}else{
-//                        		getmBall().useStarGate(mPortals[block.getNum()], 1);
-//                        	}
+
+                        	Log.i("LOG","num "+block.getNum());
+                        	Log.i("LOG",Integer.toString(mPortals[0].getD_in().getBlocs().size()));
+                        	if(block.isin(mPortals[block.getNum()-1].getD_in().getBlocs()))
+                        	{
+                        		getmBall().useStarGate(mPortals[block.getNum()-1], 0);
+                        	}else{
+                        		getmBall().useStarGate(mPortals[block.getNum()-1], 1);
+                        	}
                         	break;
                         case GATE: 
                         	//Rebound
@@ -122,15 +121,19 @@ public class LabyrinthEngine {
         mManager = (SensorManager) mActivity.getBaseContext().getSystemService(Service.SENSOR_SERVICE);
         mAccelerometre = mManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 //        Gates = new Bloc[MAX_GATE_NUMBER][2];
-//        Portals = new Bloc[MAX_PORTAL_NUMBER][2];
-//        mPortals = new Portal[MAX_GATE_NUMBER];
+          Portals = new Bloc[MAX_PORTAL_NUMBER][2][Door.LENGHT_MAX];
+          mPortals = new Portal[MAX_GATE_NUMBER];
 //        mGates = new Gate[MAX_GATE_NUMBER];
-//        for(int i = 0 ; i< MAX_PORTAL_NUMBER;i++)
-//        {
-//        	Portals[i][0]= new Bloc();
+        for(int i = 0 ; i< MAX_PORTAL_NUMBER;i++)
+        {
+        	for(int j = 0 ; j< Door.LENGHT_MAX;j++)
+        	{
+            	Portals[i][0][j]= new Bloc();
+            	Portals[i][1][j]= new Bloc();
+        	}
 //        	Gates[i][0]= new Bloc();
 //        	Gates[i][1]= new Bloc();
-//        }
+        }
     }
 
     // reset ball position
@@ -171,51 +174,56 @@ public class LabyrinthEngine {
            
             if((char) c == '.'|| (char) c == '<' ||(char) c == '>'||(char) c == '-'||(char) c == '_'){
             	//Neutral Block (fill the list)
-            	if(mBlocks.size()<=23||mBlocks.size()% 22 == 0){}else{
-            		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-                    if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}
+            	if(mBlocks.size()<=J_SIZE+1||mBlocks.size()% J_SIZE == 0){}else{
+            		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                    if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}
             	}
             	bloc = new Bloc(Type.NEUTRAL, tabi, tabj, REBOUND_0);
             }
             else if((char) c == 'b'){
             	
-            	if(mBlocks.get(mBlocks.size()-1).getType()!=Type.BORDURE){ rebound += (byte) (REBOUND_L) ;}
-            	if(mBlocks.get(mBlocks.size()-22).getType()!=Type.BORDURE){ rebound += (byte) (REBOUND_B) ;}
+            	if(mBlocks.get(mBlocks.size()-1).isSolid()==false){ rebound += (byte) (REBOUND_L) ;}
+            	if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==false){ rebound += (byte) (REBOUND_B) ;}
 
             		bloc = new Bloc(Type.BORDURE, tabi, tabj,rebound);
                  	
             } else if((char) c == 's'){
             	
-        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}
+        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}
             	bloc = new Bloc(Type.START, tabi, tabj,REBOUND_0);getmBall().setInitialRectangle(new RectF(bloc.getRectangle()));
            
             }else if((char) c == 'h'){
             	
-        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}
+        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}
             	bloc = new Bloc(Type.HOLE, tabi, tabj, REBOUND_0);
               
             }else if((char) c == 'a'){
             	
-        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}
+        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}
             	bloc = new Bloc(Type.ARRIVE, tabi, tabj, REBOUND_0);
               
-            }else if((char) c == 'p'){
-//        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-//                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
-//                bloc = new Bloc(Type.PORTAL, tabi, tabj, (byte) Character.getNumericValue(reader.read()));   
-//                bloc.setNum(Character.getNumericValue(reader.read()));
-//                if(Portals[bloc.getNum()][0].getNum() == -1){
-//                	  Portals[bloc.getNum()][0] = bloc;
-//                }else{Portals[bloc.getNum()][1] = bloc;
-//                	mPortals[bloc.getNum()] = new Portal(Portals[bloc.getNum()][0],Portals[bloc.getNum()][1]);
-//                }
-              
+            }else if((char) c == 'i'|| c == 'j'){
+        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}  
+                
+                bloc = new Bloc(Type.PORTAL, tabi, tabj, (byte)  Character.getNumericValue(reader.read())); 
+                if(c=='j'){bloc.setDoorside( (byte) Character.getNumericValue(reader.read()));}
+                Portals[bloc.getNum()-1][0][bloc.lenght(Portals[bloc.getNum()-1][0])] = bloc;
+           
+            }else if(c == 'o'|| c== 'p'){
+        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}  
+                
+                bloc = new Bloc(Type.PORTAL, tabi, tabj, (byte) Character.getNumericValue(reader.read()));
+                Log.i("LOG","ICI "+Integer.toString(bloc.getNum()));
+                if(c=='p'){bloc.setDoorside( (byte) Character.getNumericValue(reader.read()));}
+                Portals[bloc.getNum()-1][1][bloc.lenght(Portals[bloc.getNum()-1][1])] = bloc;  
             }else if((char) c == 'g'){
-//            		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-//                    if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
+//            		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+//                    if(mBlocks.get(mBlocks.size()-22).isSolid()==true){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
 //                    bloc = new Bloc(Type.GATE, tabi, tabj, (byte) Character.getNumericValue(reader.read()));   
 //                    bloc.setNum(Character.getNumericValue(reader.read()));
 //                    Gates[bloc.getNum()][0] = bloc;
@@ -223,8 +231,8 @@ public class LabyrinthEngine {
 //                    	mGates[bloc.getNum()] = new Gate(Gates[bloc.getNum()][0],Gates[bloc.getNum()][1]);
 //                    }
             }else if((char) c == 't'){
-//        		if(mBlocks.get(mBlocks.size()-1).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-//                if(mBlocks.get(mBlocks.size()-22).getType()==Type.BORDURE){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
+//        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+//                if(mBlocks.get(mBlocks.size()-22).isSolid()==true){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
 //                bloc = new Bloc(Type.TRIGGER, tabi, tabj, REBOUND_0);   
 //                bloc.setNum(Character.getNumericValue(reader.read()));
 //                Gates[bloc.getNum()][1] = bloc;
@@ -256,7 +264,14 @@ public class LabyrinthEngine {
           }
           mBlocks.removeAll(toRemove);
           toRemove.clear();
-        //  for(i)
+          tabi=0;
+          tabj=0;
+
+  		  while(Portals[tabi][0][0].getNum()!=-1){
+  			mPortals[tabi] = new Portal(Portals[tabi][0],Portals[tabi][1]);
+  			tabi++;
+  			Log.i("LOG",Integer.toString(tabi));
+  		  }
 //          mPortals = new Portal(toCreatePortal);
 //          toCreatePortal.clear();
           

@@ -7,32 +7,17 @@ import android.util.Log;
 
 
 public class Portal {
-	private Bloc b_in;
-	private Bloc b_out;
+	private Door d_in;
+	private Door d_out;
 	private int num;
 	
-	public Portal(Bloc bin, Bloc bout) {
-
-			this.setB_in(bin);
-			this.setB_out(bout);
-			this.num = bin.getNum();
+	public Portal(Bloc[] bin, Bloc[] bout) {
+			this.setD_in(new Door(bin,bin[0].getNum()));
+			this.setD_out(new Door(bout,bin[0].getNum()));
+			this.num = bin[0].getNum();
     }
 
-	public Bloc getB_in() {
-		return b_in;
-	}
 
-	public void setB_in(Bloc b_in) {
-		this.b_in = b_in;
-	}
-
-	public Bloc getB_out() {
-		return b_out;
-	}
-
-	public void setB_out(Bloc b_out) {
-		this.b_out = b_out;
-	}
 
 	public int getNum() {
 		return num;
@@ -41,6 +26,27 @@ public class Portal {
 	public void setNum(int num) {
 		this.num = num;
 	}
+
+	public Door getD_out() {
+		return d_out;
+	}
+
+	public void setD_out(Door d_out) {
+		this.d_out = d_out;
+	}
+
+
+
+	public Door getD_in() {
+		return d_in;
+	}
+
+
+
+	public void setD_in(Door d_in) {
+		this.d_in = d_in;
+	}
+
 	
 //	public void useStargate(bloc b_out){}
 }

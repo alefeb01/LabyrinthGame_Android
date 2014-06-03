@@ -3,7 +3,6 @@ package finalproject.niu.edu.tw;
 
 import android.graphics.Color;
 import android.graphics.RectF;
-import android.media.MediaPlayer;
 import android.util.Log;
 
 public class Ball {
@@ -173,73 +172,34 @@ public class Ball {
         return getmRectangle();
     }
     
-    public float[] getGateFront(Bloc gate)
-    {
-    	float f[] = {0,0} ;
-    	if(gate.isRebound_Right())
-    	{
-    		f[0] = gate.getRectangle().centerX() + 2*R;
-    		f[1] = gate.getRectangle().centerY();
-    	}else if(gate.isRebound_Left()){
-    		f[0] = gate.getRectangle().centerX() - 2*R;
-    		f[1] = gate.getRectangle().centerY();
-    	}else if(gate.isRebound_Top()){	
-    		f[0] = gate.getRectangle().centerX();
-    		f[1] = gate.getRectangle().centerY()+ 2*R ;
-    	}else if(gate.isRebound_Bottom())
-    	{
-    		f[0] = gate.getRectangle().centerX();
-    		f[1] = gate.getRectangle().centerY()- 2*R ;
-    	}
-		return f;
-    }
+    
     //Use StarGate
     public RectF useStarGate(Portal p, int i){
         // If collision
-    	Bloc b,a;
+    	Door din,dout;
     	if(i == 0)
     	{
-    		b = p.getB_out();
-    		a =	p.getB_in();
+    		dout = p.getD_out();
+    		din =	p.getD_in();
     	}else{
-    		b = p.getB_in();
-    		a = p.getB_out();
+    		dout = p.getD_in();
+    		din = p.getD_out();
     	}
     	
- 	   centerX = a.getRectangle().centerX();
- 	   centerY = a.getRectangle().centerY();
+ 	   centerX = (float) din.getCenterX();
+ 	   centerY = (float) din.getCenterY();
  	   //collisionX
- 		 if(mX < 2*R + centerX && mX > centerX && a.isRebound_Right())
- 	        {	 	   	     
-	 			 mX = getGateFront(b)[0]; 
-		  		 mY = getGateFront(b)[1];
-	 	         mSpeedY = 0;
-	 	         mSpeedX=  0;
-	 	         
-	 			 
- 	        } else if(mX > centerX - 2*R &&  mX < centerX && a.isRebound_Left()) 
- 	        {
-	 	   	     mX = getGateFront(b)[0]; 
-	 	  		 mY = getGateFront(b)[1];
-	 	         mSpeedY = 0;
-	 	         mSpeedX=  0;	        	
- 	        }
- 		 //collision Y
- 	        else if(mY < 2*R + centerY && mY > centerY && a.isRebound_Top()) 
- 	        {
-	 	   	     mX = getGateFront(b)[0]; 
-	 	  		 mY = getGateFront(b)[1];
-	 	         mSpeedY = 0;
-	 	         mSpeedX=  0;
- 	        	
- 	        } else if(mY > centerY - 2*R && mY < centerY && a.isRebound_Bottom())
- 	        {
- 	     	   //collisionX
-	 	   	     mX = getGateFront(b)[0]; 
-	 	  		 mY = getGateFront(b)[1];
-	 	         mSpeedY = 0;
-	 	         mSpeedX=  0;
- 	        }
+ 		 if(mX < 2*R + centerX && mX > centerX 
+ 		 ||mX > centerX - 2*R &&  mX < centerX
+ 		 ||mY < 2*R + centerY && mY > centerY
+ 		 ||mY > centerY - 2*R && mY < centerY )
+ 	     {	 	 
+ 			 float tab[] = dout.getDoorFront();
+ 			 mX = tab[0]; 
+		  	 mY = tab[1];
+		  	 mSpeedY = 0;
+		  	 mSpeedX=  0;	 	         	 
+ 	     } 
 
 
 
