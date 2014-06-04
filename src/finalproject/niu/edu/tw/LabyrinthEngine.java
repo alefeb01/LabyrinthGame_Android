@@ -86,8 +86,6 @@ public class LabyrinthEngine {
                               break;
                         case PORTAL:
 
-                        	Log.i("LOG","num "+block.getNum());
-                        	Log.i("LOG",Integer.toString(mPortals[0].getD_in().getBlocs().size()));
                         	if(block.isin(mPortals[block.getNum()-1].getD_in().getBlocs()))
                         	{
                         		getmBall().useStarGate(mPortals[block.getNum()-1], 0);
@@ -228,7 +226,6 @@ public class LabyrinthEngine {
                 if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}  
                 
                 bloc = new Bloc(Type.PORTAL, tabi, tabj, (byte) Character.getNumericValue(reader.read()));
-                Log.i("LOG","ICI "+Integer.toString(bloc.getNum()));
                 if(c=='p'){bloc.setDoorside( (byte) Character.getNumericValue(reader.read()));}
                 Portals[bloc.getNum()-1][1][bloc.lenght(Portals[bloc.getNum()-1][1])] = bloc;  
             }else if((char) c == 'g'){
@@ -257,7 +254,7 @@ public class LabyrinthEngine {
             }//end of while
           
           //delete neutral blocks from list
-        //  Log.i("Size","before "+ Integer.toString(mBlocks.size()));
+
           List<Bloc> toRemove = new ArrayList<Bloc>();
           //List<Bloc> toCreatePortal = new ArrayList<Bloc>();
           for(Bloc b : mBlocks) {

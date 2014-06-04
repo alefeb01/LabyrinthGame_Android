@@ -11,6 +11,8 @@
      v2.2 
     OOP : Gate&Trigger ready : the trigger open the gate
     
+    v2.2.1 correct lvl 10 & 11
+    
     
     LabX.txt
     s = start bloc
@@ -21,3 +23,6 @@
     1 = Right 2= Left 3= Top 4 = Bottom  (maybe top/bottom are reverse...)
     g1g1g1 = gate 1 (gate as border 0 and lenght-1, during opening the other blocs change status)
     t1 = trigger 1 (circle shape, popup when triggered and disappear)
+    
+    MAPs = w0 complete 10 lvls learn to use the ball and avoid holes.
+    	   w1 lvl 10 11, discover portals and gate&trigger
