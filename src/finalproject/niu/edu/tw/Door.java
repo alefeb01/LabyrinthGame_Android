@@ -18,7 +18,6 @@ public class Door {
 	
 	public Door(List<Bloc> bin, int num) {
 		this.blocs =new ArrayList<Bloc>();
-		Log.i("LOG","lala"+blocs.isEmpty());
 		this.setBlocs(bin);
 		this.setNum(num);
 		this.setLenght(bin.size());
@@ -46,6 +45,12 @@ public class Door {
 		setCenterY(getCenterY() / lenght);
 		this.setEntry(bin[bin[0].lenght(bin)-1].getDoorside());
     }
+
+	public Door() {
+		// TODO Auto-generated constructor stub
+		this.blocs =new ArrayList<Bloc>();
+		this.setNum(-1);
+	}
 
 	private void setBlocs(Bloc[] bin) {
 		
@@ -123,4 +128,30 @@ public class Door {
 	public void setEntry(int entry) {
 		Entry = entry;
 	}
+
+	public void update() {
+
+		this.setLenght(this.getBlocs().size());
+		for(Bloc b : this.getBlocs())
+		{
+			setCenterX(getCenterX() + b.getRectangle().centerX());
+			setCenterY(getCenterY() + b.getRectangle().centerY());
+		}
+		setCenterX(getCenterX() / lenght);
+		setCenterY(getCenterY() / lenght);
+	}
+	
+	public int setEntry() {
+
+		if(Math.abs(this.getBlocs().get(0).getRectangle().centerX() - this.getBlocs().get(lenght-1).getRectangle().centerX()) == 0)
+		{
+			setEntry(LabyrinthEngine.REBOUND_R);
+			return LabyrinthEngine.REBOUND_R;
+		}else{
+			setEntry(LabyrinthEngine.REBOUND_T);
+			return LabyrinthEngine.REBOUND_T;
+		}
+	}
+	
+	
 }

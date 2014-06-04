@@ -1,6 +1,8 @@
 package finalproject.niu.edu.tw;
 import java.util.List;
 
+import finalproject.niu.edu.tw.Bloc.Type;
+
 import android.graphics.Color;
 import android.graphics.RectF;
 
@@ -98,6 +100,37 @@ public class Bloc {
 		// TODO Auto-generated constructor stub
 		this.num = -1;
 	}
+	public Bloc(Type pType, int pX, int pY, byte rebound, int i) {
+		// TODO Auto-generated constructor stub
+		this.mType = pType;
+        
+        switch(mType){
+        
+	        case TRIGGER:
+	        	this.mCouleur = Color.BLUE;
+	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
+	        	this.setNum(i);
+	        	this.setSolid(false);
+	        	break;
+	        case GATE:
+	        	this.mCouleur = Color.BLACK;
+	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE);
+	        	this.setSolid(true);
+	        	this.setNum(i);
+	        	break;
+        }
+
+       //Set Rebound possibility
+        	//rebound = REBOUND_L + REBOUND_T;
+        //	Log.i("Byte",Byte.toString(rebound)+ " "+ Integer.toBinaryString(rebound).replace(" ", "0"));
+
+         	if(((rebound >> 3)& 1) ==1 ) this.setRebound_Bottom(true);
+         	if(((rebound >> 2)& 1) ==1 ) this.setRebound_Top(true);
+         	if(((rebound >> 1)& 1) ==1 ) this.setRebound_Left(true);
+         	if(((rebound >> 0)& 1) ==1 ) this.setRebound_Right(true);
+  
+	}
+
 	//return the size of array bloc
 	public int lenght(Bloc[] b)
 	{

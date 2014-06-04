@@ -2,21 +2,24 @@ package finalproject.niu.edu.tw;
 
 import java.util.List;
 
+import android.graphics.Color;
+import android.util.Log;
+
 import finalproject.niu.edu.tw.Bloc.Type;
 
 public class Gate {
 
 	
 	private Bloc trigger;
-	private Bloc Gate;
+	private Door Gate;
 	private int num;
 	private boolean active;
 	
-	public Gate(Bloc bgate,Bloc btrigger) {
+	public Gate(Door gate,Bloc btrigger) {
 		
 		this.setTrigger(btrigger);
-		this.setGate(bgate);
-		this.num = bgate.getNum();
+		this.setGate(gate);
+		this.num = btrigger.getNum();
 		this.setActive(true);
     }
 
@@ -28,12 +31,12 @@ public class Gate {
 		this.trigger = trigger;
 	}
 
-	public Bloc getGate() {
+	public Door getGate() {
 		return Gate;
 	}
 
-	public void setGate(Bloc gate) {
-		Gate = gate;
+	public void setGate(Door gate2) {
+		Gate = gate2;
 	}
 
 	public int getNum() {
@@ -50,5 +53,25 @@ public class Gate {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	public void openGate(){
+		this.setActive(false);
+
+		if(this.getGate().setEntry()== LabyrinthEngine.REBOUND_R  ){
+			this.getGate().getBlocs().get(0).setRebound_Top(true);
+			this.getGate().getBlocs().get(this.getGate().getLenght()-1).setRebound_Bottom(true);
+		}else if(this.getGate().getEntry()== LabyrinthEngine.REBOUND_T)
+		{
+			this.getGate().getBlocs().get(0).setRebound_Right(true);
+			this.getGate().getBlocs().get(this.getGate().getLenght()-1).setRebound_Left(true);
+		}
+		for(int i = 1; i<this.getGate().getLenght()-1; i++ )
+		{
+			this.getGate().getBlocs().get(i).setCouleur(Color.GRAY);
+			this.getGate().getBlocs().get(i).setSolid(false);
+		}
+		this.getTrigger().setCouleur(Color.CYAN);
+		
 	}
 }

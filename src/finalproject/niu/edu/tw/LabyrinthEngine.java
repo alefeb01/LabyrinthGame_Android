@@ -11,6 +11,7 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 import android.util.Log;
+import android.widget.Toast;
 import finalproject.niu.edu.tw.Bloc.Type;
 import android.app.Service;
 import android.graphics.RectF;
@@ -42,9 +43,9 @@ public class LabyrinthEngine {
     // labyrinth
     private List<Bloc> mBlocks = null;
     private Portal mPortals[] = null;
- //   private Gate mGates[] = null;
+    private Gate mGates[] = null;
 
-//    private Bloc Gates[][] = null;
+
 
     private LabyrinthActivity mActivity = null;
 
@@ -96,14 +97,16 @@ public class LabyrinthEngine {
                         	break;
                         case GATE: 
                         	//Rebound
-                        	getmBall().collisionXY(block);
+                        	if(block.isSolid()){
+                        		getmBall().collisionXY(block);
+                        	}
                             break;
                         case TRIGGER: 
-                        	//Rebound	
-//                        	if(mGates[block.getNum()].isActive()){
-//                        		Toast.makeText(mActivity, "OpenGate", Toast.LENGTH_SHORT).show();		
-//                            	getmBall().openGate(mGates[block.getNum()]);
-//                        	}
+                        	//Rebound
+                        	if(mGates[block.getNum()-1].isActive()){
+                        		Toast.makeText(mActivity, "OpenGate", Toast.LENGTH_SHORT).show();		
+                        		mGates[block.getNum()-1].openGate();
+                        	}
                             break;
                         }
                     }
@@ -123,7 +126,7 @@ public class LabyrinthEngine {
 //        Gates = new Bloc[MAX_GATE_NUMBER][2];
 
           mPortals = new Portal[MAX_GATE_NUMBER];
-//        mGates = new Gate[MAX_GATE_NUMBER];
+          mGates = new Gate[MAX_GATE_NUMBER];
 
     }
 
@@ -153,16 +156,21 @@ public class LabyrinthEngine {
         	input = new InputStreamReader(is, Charset.forName("UTF-8"));
           reader = new BufferedReader(input);
       	  Bloc[][][] Portals = null;
+      	  Door[] Gates= null;
+      	  Bloc[] Triggers = null;
           Portals = new Bloc[MAX_PORTAL_NUMBER][2][Door.LENGHT_MAX];
+          Gates = new Door[MAX_PORTAL_NUMBER];
+          Triggers = new Bloc[MAX_PORTAL_NUMBER];
           for(int i = 0 ; i< MAX_PORTAL_NUMBER;i++)
           {
+        	Gates[i]= new Door();
+        	Triggers[i] = new Bloc();
           	for(int j = 0 ; j< Door.LENGHT_MAX;j++)
           	{
               	Portals[i][0][j]= new Bloc();
-              	Portals[i][1][j]= new Bloc();
+              	Portals[i][1][j]= new Bloc(); 
+              	
           	}
-//          	Gates[i][0]= new Bloc();
-//          	Gates[i][1]= new Bloc();
           }
           //table index
           int tabi = 0;
@@ -224,23 +232,16 @@ public class LabyrinthEngine {
                 if(c=='p'){bloc.setDoorside( (byte) Character.getNumericValue(reader.read()));}
                 Portals[bloc.getNum()-1][1][bloc.lenght(Portals[bloc.getNum()-1][1])] = bloc;  
             }else if((char) c == 'g'){
-//            		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-//                    if(mBlocks.get(mBlocks.size()-22).isSolid()==true){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
-//                    bloc = new Bloc(Type.GATE, tabi, tabj, (byte) Character.getNumericValue(reader.read()));   
-//                    bloc.setNum(Character.getNumericValue(reader.read()));
-//                    Gates[bloc.getNum()][0] = bloc;
-//                    if(Gates[bloc.getNum()][1].getNum() != -1){
-//                    	mGates[bloc.getNum()] = new Gate(Gates[bloc.getNum()][0],Gates[bloc.getNum()][1]);
-//                    }
+            		if(mBlocks.get(mBlocks.size()-1).isSolid()==false){ rebound += (byte) (REBOUND_L) ;}
+                	if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==false){ rebound += (byte) (REBOUND_B) ;}
+                    bloc = new Bloc(Type.GATE, tabi, tabj, rebound,Character.getNumericValue(reader.read()));
+                    Gates[bloc.getNum()-1].getBlocs().add(bloc);
+                    Gates[bloc.getNum()-1].update();
             }else if((char) c == 't'){
-//        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-//                if(mBlocks.get(mBlocks.size()-22).isSolid()==true){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
-//                bloc = new Bloc(Type.TRIGGER, tabi, tabj, REBOUND_0);   
-//                bloc.setNum(Character.getNumericValue(reader.read()));
-//                Gates[bloc.getNum()][1] = bloc;
-//                if(Gates[bloc.getNum()][0].getNum() != -1){
-//                	mGates[bloc.getNum()] = new Gate(Gates[bloc.getNum()][0],Gates[bloc.getNum()][1]);
-//                }
+        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                if(mBlocks.get(mBlocks.size()-22).isSolid()==true){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
+                bloc = new Bloc(Type.TRIGGER, tabi, tabj, REBOUND_0,Character.getNumericValue(reader.read()));   
+                Triggers[bloc.getNum()-1] = bloc;
             }else if ((char) c == '\n') {
               // Change line!
               tabi = -1;
@@ -272,13 +273,13 @@ public class LabyrinthEngine {
   		  while(Portals[tabi][0][0].getNum()!=-1){
   			mPortals[tabi] = new Portal(Portals[tabi][0],Portals[tabi][1]);
   			tabi++;
-  			Log.i("LOG",Integer.toString(tabi));
   		  }
-//          mPortals = new Portal(toCreatePortal);
-//          toCreatePortal.clear();
-          
-          
-          //Log.i("Size","after "+ Integer.toString(mBlocks.size()));
+  		  tabi= 0;
+  		  while(Triggers[tabi].getNum()!=-1){
+  			mGates[tabi] = new Gate(Gates[tabi],Triggers[tabi]);
+  			tabi++;
+  		  }
+
         } catch (IllegalCharsetNameException e) {
           e.printStackTrace();
         } catch (UnsupportedCharsetException e) {

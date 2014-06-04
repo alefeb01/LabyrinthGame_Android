@@ -221,14 +221,5 @@ public class Ball {
 	public void setmRectangle(RectF mRectangle) {
 		this.mRectangle = mRectangle;
 	}
-	public void openGate(Gate gate) {
-		gate.setActive(false);
-		gate.getGate().setRebound_Bottom(false);
-		gate.getGate().setRebound_Top(false);
-		gate.getGate().setRebound_Right(false);
-		gate.getGate().setRebound_Left(false);
-		gate.getGate().setCouleur(Color.GRAY);
-		gate.getTrigger().setCouleur(Color.CYAN);
-		
-	}
+
 }
