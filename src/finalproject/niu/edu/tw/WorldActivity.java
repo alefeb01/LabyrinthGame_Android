@@ -33,8 +33,7 @@ public class WorldActivity extends Activity {
     public static final int MINUTE_FOR_A_LIFE = 5;
     public static final int SECOND_PER_MINUTE = 60;
     public static final int TIME_FOR_A_LIFE_S = MINUTE_FOR_A_LIFE * SECOND_PER_MINUTE;
-    public static final int LEVEL_PER_WORLD = 10;
-
+    private int lvl_Number= 0;
  
     TextView tLife;
     TextView tTime;
@@ -62,7 +61,7 @@ public class WorldActivity extends Activity {
         bundle = intent.getExtras();
         
 
-        
+        setLvl_Number();
         settings = getSharedPreferences(PREFS_NAME, 0);
         editor = settings.edit();
         
@@ -237,7 +236,7 @@ public class WorldActivity extends Activity {
     	Button b = new Button(this);
     	Drawable d = b.getBackground();
     	Drawable d_lock = getResources().getDrawable(R.drawable.lock);
-    	for(int i = 0; i< LEVEL_PER_WORLD; i++){
+    	for(int i = 0; i< getLvl_Number(); i++){
     		final int LOC = bundle.getInt("WORLD")*10+i;
     		if(i<=iCurrentLvl-(iCurrentLvl/10)*10 && bundle.getInt("WORLD")<=(iCurrentLvl/10) || bundle.getInt("WORLD")<(iCurrentLvl/10)  ){
     			btnArray[i].setBackgroundDrawable(d);
@@ -279,8 +278,8 @@ public class WorldActivity extends Activity {
 	        tLvl.setText("World "+bundle.getInt("WORLD")+" Level Selection");
 	        tLvl.setX(270);
 	        HorizontalScrollView  svLvl = new HorizontalScrollView(this);
-	        btnArray = new Button[LEVEL_PER_WORLD];
-	        for(int i = 0; i < LEVEL_PER_WORLD; i++) 
+	        btnArray = new Button[getLvl_Number()];
+	        for(int i = 0; i < getLvl_Number(); i++) 
 	        {
 	        	Button b = new Button(this);
 	            final int LOC = bundle.getInt("WORLD")*10+i;
@@ -325,7 +324,27 @@ public class WorldActivity extends Activity {
 
     	return LabyrinthMapLvl; 
     }
-    //inside this function which u have to run
+    public int getLvl_Number() {
+		return lvl_Number;
+	}
+
+	public void setLvl_Number() {
+		lvl_Number = 0;
+		String[] fileNames = null;
+		try {
+			fileNames = getAssets().list("W"+bundle.getInt("WORLD"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(String name:fileNames){
+			if(name.startsWith("Lab")){
+				lvl_Number++;  
+			}
+		}
+		return;
+	}
+	//inside this function which u have to run
     private Runnable runnable = new Runnable() {
         public void run() {
         	if(iLife<5)

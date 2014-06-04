@@ -2,6 +2,7 @@ package finalproject.niu.edu.tw;
 
 
 
+import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
@@ -38,11 +39,10 @@ public class MapActivity extends Activity {
     public static final int SECOND_PER_MINUTE = 60;
     public static final int TIME_FOR_A_LIFE_S = MINUTE_FOR_A_LIFE * SECOND_PER_MINUTE;
     //DEV VAR
-    public static final int WORLD_DEV_LIMIT = 2;
 	public static final String ADMIN_CODE = "qwerty";
 
 	
-
+	private int World_number = 0;
 	Activity act = this;
     TextView tLife;
     TextView tTime;
@@ -71,7 +71,7 @@ public class MapActivity extends Activity {
 
         settings = getSharedPreferences(PREFS_NAME, 0);
         editor = settings.edit();
-        
+        setWorld_number();
         
 	    
 	  //declare like this
@@ -297,8 +297,8 @@ public class MapActivity extends Activity {
     	Button b = new Button(this);
     	Drawable d = b.getBackground();
     	Drawable d_lock = getResources().getDrawable(R.drawable.lock);
-    	for(int i = 0; i< WORLD_DEV_LIMIT+1; i++){
-    		 if(i < WORLD_DEV_LIMIT)
+    	for(int i = 0; i< getWorld_number()+1; i++){
+    		 if(i < getWorld_number()-1)
     		 {
     			 if(i <= iCurrentLvl/10){
     				 btnArray[i].setBackgroundDrawable(d);
@@ -339,11 +339,12 @@ public class MapActivity extends Activity {
 	        tWorld.setText("World Selection");
 	        tWorld.setX(270);
 	        HorizontalScrollView  svLvl = new HorizontalScrollView(this);
-	        btnArray = new Button[WORLD_DEV_LIMIT+1];
-	        for(int i = 0; i <= WORLD_DEV_LIMIT; i++) 
+	        btnArray = new Button[getWorld_number()];
+	        
+	        for(int i = 0; i <= getWorld_number()-1; i++) 
 	        {
 	            Button b = new Button(this);
-	            if(i < WORLD_DEV_LIMIT)
+	            if(i < getWorld_number()-1)
 	            {
 	            	if(i <= iCurrentLvl/10){
 			            b.setText("World\n"+i);
@@ -397,7 +398,27 @@ public class MapActivity extends Activity {
 
     	return LabyrinthMapWorld; 
     }
-    //inside this function which u have to run
+    public int getWorld_number() {
+		return World_number;
+	}
+
+	public void setWorld_number() {
+		World_number = 0;
+		String[] fileNames = null;
+		try {
+			fileNames = getAssets().list("");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(String name:fileNames){
+			if(name.startsWith("W")){
+				World_number++;  
+			}
+		}
+		return;
+	}
+	//inside this function which u have to run
     private Runnable runnable = new Runnable() {
         public void run() {
         	if(iLife<5)

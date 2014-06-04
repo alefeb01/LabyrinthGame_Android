@@ -13,6 +13,9 @@
     
     v2.2.1 correct lvl 10 & 11
     
+    v2.2.2
+    Remove global WORLD_DEV_LIMIT and LVL_PER_WORLD, using assetmanager to get it through
+    
     
     LabX.txt
     s = start bloc
