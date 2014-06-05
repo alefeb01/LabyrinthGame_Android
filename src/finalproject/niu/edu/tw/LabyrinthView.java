@@ -78,6 +78,8 @@ public class LabyrinthView extends SurfaceView implements SurfaceHolder.Callback
                 case GATE:
                 	pCanvas.drawRect(b.getRectangle(), mPaint);
                 	break;	
+                case SWITCH:
+                	pCanvas.drawCircle(b.getRectangle().centerX(),b.getRectangle().centerY(),b.getRectangle().height()/2, mPaint);
                 }
             }
         }

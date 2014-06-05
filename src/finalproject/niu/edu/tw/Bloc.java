@@ -10,7 +10,7 @@ import android.graphics.RectF;
 public class Bloc {
 
 	
-    enum  Type { BORDURE, START, ARRIVE, HOLE, NEUTRAL, PORTAL,TRIGGER,GATE};
+    enum  Type { BORDURE, START, ARRIVE, HOLE, NEUTRAL, PORTAL,TRIGGER,GATE,SWITCH};
     
     private float SIZE = Ball.R * 2;
     
@@ -82,6 +82,10 @@ public class Bloc {
 	        	this.mCouleur = Color.MAGENTA;
 	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
 	        	this.setNum(rebound);
+	        	break;
+	        case SWITCH:
+	        	this.mCouleur = Color.CYAN;
+	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
 	        	break;
         }
 

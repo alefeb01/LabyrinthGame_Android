@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 import finalproject.niu.edu.tw.Bloc.Type;
 import android.app.Service;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -44,7 +45,7 @@ public class LabyrinthEngine {
     private List<Bloc> mBlocks = null;
     private Portal mPortals[] = null;
     private Gate mGates[] = null;
-
+    private Switch mSwitch = null;
 
 
     private LabyrinthActivity mActivity = null;
@@ -71,8 +72,7 @@ public class LabyrinthEngine {
                     if(inter.intersect(hitBox)) {
                         // depend on block
                         switch(block.getType()) {
-                        case BORDURE:
-                          
+                        case BORDURE:                          
                         	//Rebound
                         	getmBall().collisionXY(block);
                             break;
@@ -85,7 +85,7 @@ public class LabyrinthEngine {
                             mActivity.showDialog(LabyrinthActivity.DEFEAT_DIALOG);
                               break;
                         case PORTAL:
-
+                        	//Teleportation
                         	if(block.isin(mPortals[block.getNum()-1].getD_in().getBlocs()))
                         	{
                         		getmBall().useStarGate(mPortals[block.getNum()-1], 0);
@@ -94,19 +94,28 @@ public class LabyrinthEngine {
                         	}
                         	break;
                         case GATE: 
-                        	//Rebound
+                        	//Door 
                         	if(block.isSolid()){
                         		getmBall().collisionXY(block);
                         	}
                             break;
                         case TRIGGER: 
-                        	//Rebound
+                        	// active the door
                         	if(mGates[block.getNum()-1].isActive()){
                         		Toast.makeText(mActivity, "OpenGate", Toast.LENGTH_SHORT).show();		
                         		mGates[block.getNum()-1].openGate();
                         	}
                             break;
+                        case SWITCH:
+                        	// Reverse sensor
+                        	if(block.equals(mSwitch.getSwitches().get(mSwitch.getActive())))
+                        	{
+                        		mSwitch.ChangeActive(mBall);
+                        		Toast.makeText(mActivity, "UseSwitch", Toast.LENGTH_SHORT).show();	
+                        	}
+                        	break;
                         }
+                        
                     }
                 }
              }
@@ -125,6 +134,7 @@ public class LabyrinthEngine {
 
           mPortals = new Portal[MAX_GATE_NUMBER];
           mGates = new Gate[MAX_GATE_NUMBER];
+          mSwitch = new Switch();
 
     }
 
@@ -206,6 +216,15 @@ public class LabyrinthEngine {
         		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
                 if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}
             	bloc = new Bloc(Type.HOLE, tabi, tabj, REBOUND_0);
+              
+            }else if((char) c == 'q'||c=='r'){
+            	
+        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}
+            	bloc = new Bloc(Type.SWITCH, tabi, tabj, REBOUND_0);
+            	if(c=='r'){bloc.setCouleur(Color.YELLOW);mSwitch.setActive(mSwitch.getSwitches().size());
+            	}
+            	mSwitch.getSwitches().add(bloc);
               
             }else if((char) c == 'a'){
             	

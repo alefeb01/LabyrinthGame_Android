@@ -31,7 +31,7 @@ public class Ball {
     //Var coorX Y
     private float centerX = 0;
     private float centerY = 0;
-    //private boolean mInMovement = false;
+    private boolean SwitchActive = false;
     // Initial Rectangle
 
     public void setInitialRectangle(RectF pInitialRectangle) {
@@ -150,6 +150,11 @@ public class Ball {
    }
     public RectF putXAndY(float pX, float pY) {
 
+    		if(isSwitchActive())
+    		{
+    			pX = -pX;
+    			pY = -pY;
+    		}
             mSpeedX += pX / COMPENSATEUR;
             if(mSpeedX > MAX_SPEED)
                 mSpeedX = MAX_SPEED;
@@ -220,6 +225,12 @@ public class Ball {
 	}
 	public void setmRectangle(RectF mRectangle) {
 		this.mRectangle = mRectangle;
+	}
+	public boolean isSwitchActive() {
+		return SwitchActive;
+	}
+	public void changeSwitchActive() {
+		SwitchActive =! SwitchActive;
 	}
 
 }
