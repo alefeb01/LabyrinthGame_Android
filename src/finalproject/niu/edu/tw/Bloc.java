@@ -38,6 +38,17 @@ public class Bloc {
     public Type getType() {
         return mType;
     }
+    public void changeType(Type type){
+    	mType = type;
+    	switch(mType){
+    		case NEUTRAL:
+    			mCouleur = Color.CYAN;
+    			break;
+    		case HOLE:
+    			mCouleur = Color.GREEN;
+    			break;
+    	}
+    }
 
     public RectF getRectangle() {
         return mRectangle;

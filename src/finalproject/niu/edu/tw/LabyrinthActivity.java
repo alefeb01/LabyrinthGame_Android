@@ -30,6 +30,7 @@ public class LabyrinthActivity extends Activity {
 	Bundle bundle;
 	Intent intent;
     // Victory Dialog
+	protected int tictimer = -1;
     public static final int VICTORY_DIALOG = 0;
     // Defeat Dialog
     public static final int DEFEAT_DIALOG = 1;
@@ -118,8 +119,7 @@ public class LabyrinthActivity extends Activity {
 
 
 	    // call in oncreate()
-	    handlerTime.postDelayed(runnable, 1000); //1sec
-	    
+	    handlerTime.postDelayed(runnable, 20); //20ms	    
         //Drawing widgets...TEST2
         FrameLayout LabyrinthGame = new FrameLayout(this);
         mView = new LabyrinthView(this);
@@ -368,7 +368,27 @@ public class LabyrinthActivity extends Activity {
     //inside this function which u have to run
     private Runnable runnable = new Runnable() {
         public void run() {
-        	if(iLife<5)
+        	tictimer = (tictimer+1) % 150;
+        	run_Coordinates_updates();
+        	if(tictimer % 50 == 0){
+        		//Modif Affichage Life + time
+        		run_TimeLife_update();  
+        		if(tictimer %150 == 0){
+        			mEngine.getmLaser().run_ChangeStatus();
+        		}
+        	}
+        	
+        	
+        	handlerTime.postDelayed(this, 20);
+        }
+
+		private void run_Coordinates_updates() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		private void run_TimeLife_update() {
+    		if(iLife<5)
         	{//Recover Life process
         		iTime_since = (int) ((System.currentTimeMillis()/1000) - lTime_sec) 	;	
             	iTime_min = (TIME_FOR_A_LIFE_S -iTime_since )/ 60;
@@ -399,7 +419,6 @@ public class LabyrinthActivity extends Activity {
 
             	}
         	}
-        	handlerTime.postDelayed(this, 1000);
-        }
+		}
     };
 }

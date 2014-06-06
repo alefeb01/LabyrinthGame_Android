@@ -46,7 +46,7 @@ public class LabyrinthEngine {
     private Portal mPortals[] = null;
     private Gate mGates[] = null;
     private Switch mSwitch = null;
-
+    private Laser mLaser = null; 
 
     private LabyrinthActivity mActivity = null;
 
@@ -135,7 +135,7 @@ public class LabyrinthEngine {
           mPortals = new Portal[MAX_GATE_NUMBER];
           mGates = new Gate[MAX_GATE_NUMBER];
           mSwitch = new Switch();
-
+          setmLaser(new Laser());
     }
 
     // reset ball position
@@ -190,7 +190,7 @@ public class LabyrinthEngine {
           while((c = reader.read()) != -1) {
         	
            
-            if((char) c == '.'|| (char) c == '<' ||(char) c == '>'||(char) c == '-'||(char) c == '_'){
+            if((char) c == '.'){
             	//Neutral Block (fill the list)
             	if(mBlocks.size()<=J_SIZE+1||mBlocks.size()% J_SIZE == 0){}else{
             		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
@@ -211,11 +211,15 @@ public class LabyrinthEngine {
                 if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}
             	bloc = new Bloc(Type.START, tabi, tabj,REBOUND_0);getmBall().setInitialRectangle(new RectF(bloc.getRectangle()));
            
-            }else if((char) c == 'h'){
+            }else if((char) c == 'h'||(char) c == 'l'){
+            	
             	
         		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
                 if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}
             	bloc = new Bloc(Type.HOLE, tabi, tabj, REBOUND_0);
+            	if(c == 'l'){
+            		mLaser.getLasers().add(bloc);
+            	}
               
             }else if((char) c == 'q'||c=='r'){
             	
@@ -327,6 +331,14 @@ public class LabyrinthEngine {
 
 	public void setmBall(Ball mBall) {
 		this.mBall = mBall;
+	}
+
+	public Laser getmLaser() {
+		return mLaser;
+	}
+
+	public void setmLaser(Laser mLaser) {
+		this.mLaser = mLaser;
 	}
 
 }
