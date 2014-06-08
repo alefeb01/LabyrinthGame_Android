@@ -15,7 +15,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Time;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -369,7 +369,11 @@ public class LabyrinthActivity extends Activity {
     private Runnable runnable = new Runnable() {
         public void run() {
         	tictimer = (tictimer+1) % 150;
-        	run_Coordinates_updates();
+        	for(Wheel w: mEngine.getmWheel() )
+        	{
+        		w.run_WheelMvmt();
+        	}
+        	
         	if(tictimer % 50 == 0){
         		//Modif Affichage Life + time
         		run_TimeLife_update();  
@@ -382,10 +386,7 @@ public class LabyrinthActivity extends Activity {
         	handlerTime.postDelayed(this, 20);
         }
 
-		private void run_Coordinates_updates() {
-			// TODO Auto-generated method stub
-			
-		}
+
 
 		private void run_TimeLife_update() {
     		if(iLife<5)

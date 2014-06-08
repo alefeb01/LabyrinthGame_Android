@@ -1,11 +1,9 @@
 package finalproject.niu.edu.tw;
 
-import java.util.List;
 
 import android.graphics.Color;
-import android.util.Log;
+//import android.util.Log;
 
-import finalproject.niu.edu.tw.Bloc.Type;
 
 public class Gate {
 
@@ -14,7 +12,7 @@ public class Gate {
 	private Door Gate;
 	private int num;
 	private boolean active;
-	
+	protected int tabx = 0; 
 	public Gate(Door gate,Bloc btrigger) {
 		
 		this.setTrigger(btrigger);
@@ -66,10 +64,10 @@ public class Gate {
 			this.getGate().getBlocs().get(0).setRebound_Right(true);
 			this.getGate().getBlocs().get(this.getGate().getLenght()-1).setRebound_Left(true);
 		}
-		for(int i = 1; i<this.getGate().getLenght()-1; i++ )
+		for(tabx = 1; tabx<this.getGate().getLenght()-1; tabx++ )
 		{
-			this.getGate().getBlocs().get(i).setCouleur(Color.GRAY);
-			this.getGate().getBlocs().get(i).setSolid(false);
+			this.getGate().getBlocs().get(tabx).setCouleur(Color.GRAY);
+			this.getGate().getBlocs().get(tabx).setSolid(false);
 		}
 		this.getTrigger().setCouleur(Color.CYAN);
 		

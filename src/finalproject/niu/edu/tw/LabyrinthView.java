@@ -6,7 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
+//import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -67,6 +67,9 @@ public class LabyrinthView extends SurfaceView implements SurfaceHolder.Callback
                 case HOLE:
                     pCanvas.drawRect(b.getRectangle(), mPaint);
                     break;
+                case HOLE2:
+                	pCanvas.drawCircle(b.getRectangle().centerX(),b.getRectangle().centerY(),b.getRectangle().height()/2, mPaint);
+                	break;
                 case NEUTRAL:
                 	break;
                 case PORTAL:
@@ -80,7 +83,10 @@ public class LabyrinthView extends SurfaceView implements SurfaceHolder.Callback
                 	break;	
                 case SWITCH:
                 	pCanvas.drawCircle(b.getRectangle().centerX(),b.getRectangle().centerY(),b.getRectangle().height()/2, mPaint);
+                	break;
+                	
                 }
+                
             }
         }
 

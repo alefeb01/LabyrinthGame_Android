@@ -1,8 +1,6 @@
 package finalproject.niu.edu.tw;
 
 
-
-import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
@@ -14,11 +12,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Time;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;

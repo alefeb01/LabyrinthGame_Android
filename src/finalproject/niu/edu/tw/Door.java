@@ -3,10 +3,10 @@ package finalproject.niu.edu.tw;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
+//import android.util.Log;
 
 public class Door {
-	
+	protected int tabx = 0; 
 	public enum Type {GATE,PORTAL}
 	public static final int LENGHT_MAX = 4;
 	private int lenght = 2;
@@ -54,8 +54,8 @@ public class Door {
 
 	private void setBlocs(Bloc[] bin) {
 		
-		for( int i = 0; i < bin[0].lenght(bin);i++){
-			this.blocs.add(bin[i]);
+		for( tabx = 0; tabx < bin[0].lenght(bin);tabx++){
+			this.blocs.add(bin[tabx]);
 		}
 
 	}

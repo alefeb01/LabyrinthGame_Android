@@ -1,9 +1,6 @@
 package finalproject.niu.edu.tw;
-import java.util.List;
 
-import finalproject.niu.edu.tw.Bloc.Type;
-import android.graphics.RectF;
-import android.util.Log;
+//import android.util.Log;
 
 
 public class Portal {

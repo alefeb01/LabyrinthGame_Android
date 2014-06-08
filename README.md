@@ -25,7 +25,10 @@
     Handler to put some dynamic
     bug : when the speed of the ball is too high it can go through the walls...
 
-
+	v2.5
+	OOP : Wheel (death wheel)
+	bug : when the speed of the ball is too high it can go through the walls...
+	
     LabX.txt
     s = start bloc
     a = arrival block
@@ -37,7 +40,10 @@
     g1g1g1 = gate 1 (gate as border 0 and lenght-1, during opening the other blocs change status)
     t1 = trigger 1 (circle shape, popup when triggered and disappear)
     l = laser
+    w5 = 4spokes wheel 5b lenght.
     
     MAPs = w0 complete 10 lvls learn to use the ball and avoid holes.
     	   w1 lvl 10 11, discover portals and gate&trigger
     	   	  lvl 12, discover Switch
+    	   	  lvl 13, discover Laser
+    	   	  lvl 14, discover Wheel

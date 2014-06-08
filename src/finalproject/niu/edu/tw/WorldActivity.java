@@ -4,8 +4,6 @@ package finalproject.niu.edu.tw;
 import java.io.IOException;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,9 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.text.format.Time;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -28,7 +25,7 @@ public class WorldActivity extends Activity {
 
 	Bundle bundle;
 	Intent intent;
-
+	protected int tabx = 0; 
     public static final String PREFS_NAME = "sharedPreferences.txt";
     public static final int MINUTE_FOR_A_LIFE = 5;
     public static final int SECOND_PER_MINUTE = 60;
@@ -236,11 +233,11 @@ public class WorldActivity extends Activity {
     	Button b = new Button(this);
     	Drawable d = b.getBackground();
     	Drawable d_lock = getResources().getDrawable(R.drawable.lock);
-    	for(int i = 0; i< getLvl_Number(); i++){
-    		final int LOC = bundle.getInt("WORLD")*10+i;
-    		if(i<=iCurrentLvl-(iCurrentLvl/10)*10 && bundle.getInt("WORLD")<=(iCurrentLvl/10) || bundle.getInt("WORLD")<(iCurrentLvl/10)  ){
-    			btnArray[i].setBackgroundDrawable(d);
-    			btnArray[i].setOnClickListener(new Button.OnClickListener(){
+    	for(tabx = 0; tabx< getLvl_Number(); tabx++){
+    		final int LOC = bundle.getInt("WORLD")*10+tabx;
+    		if(tabx<=iCurrentLvl-(iCurrentLvl/10)*10 && bundle.getInt("WORLD")<=(iCurrentLvl/10) || bundle.getInt("WORLD")<(iCurrentLvl/10)  ){
+    			btnArray[tabx].setBackgroundDrawable(d);
+    			btnArray[tabx].setOnClickListener(new Button.OnClickListener(){
 	                public void onClick(View v){
 	              	 if(iLife>0){
 	                	Intent lvl_intent = new Intent(WorldActivity.this, LabyrinthActivity.class);
@@ -256,8 +253,8 @@ public class WorldActivity extends Activity {
 	              }); 	
     		}
     		else{
-    			btnArray[i].setBackgroundDrawable(d_lock);
-    			btnArray[i].setOnClickListener(new Button.OnClickListener(){
+    			btnArray[tabx].setBackgroundDrawable(d_lock);
+    			btnArray[tabx].setOnClickListener(new Button.OnClickListener(){
 	                public void onClick(View v){
 		                Toast.makeText(WorldActivity.this, "Access Refused", Toast.LENGTH_SHORT).show();}
 	                
@@ -279,16 +276,16 @@ public class WorldActivity extends Activity {
 	        tLvl.setX(270);
 	        HorizontalScrollView  svLvl = new HorizontalScrollView(this);
 	        btnArray = new Button[getLvl_Number()];
-	        for(int i = 0; i < getLvl_Number(); i++) 
+	        for(tabx = 0; tabx < getLvl_Number(); tabx++) 
 	        {
 	        	Button b = new Button(this);
-	            final int LOC = bundle.getInt("WORLD")*10+i;
+	            final int LOC = bundle.getInt("WORLD")*10+tabx;
 	            //Log.i("LOG",Integer.toString(i));
 	            b.setHeight(100);
 	            b.setWidth(100);
 	            if(LOC <= iCurrentLvl)
 	            {
-	            	b.setText("Lvl\n"+i);
+	            	b.setText("Lvl\n"+tabx);
 	            	b.setOnClickListener(new Button.OnClickListener(){
 		                public void onClick(View v){
 		              	 if(iLife>0){
@@ -306,7 +303,7 @@ public class WorldActivity extends Activity {
 		              }); 	
 	            }else{
 	            	Drawable d = getResources().getDrawable(R.drawable.lock);
-	            	b.setText("Lvl\n"+i);
+	            	b.setText("Lvl\n"+tabx);
 	            	b.setBackgroundDrawable(d);
 	            	b.setOnClickListener(new Button.OnClickListener(){
 		                public void onClick(View v){
@@ -314,8 +311,8 @@ public class WorldActivity extends Activity {
 		                
 		              }); 		            	
 	            }
-	            btnArray[i]=b;
-	            LabyrinthSv.addView(btnArray[i]);
+	            btnArray[tabx]=b;
+	            LabyrinthSv.addView(btnArray[tabx]);
 	        }
 	        svLvl.addView(LabyrinthSv);
 	        LabyrinthMapLvl.addView(tLvl);

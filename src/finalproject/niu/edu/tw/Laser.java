@@ -3,7 +3,7 @@ package finalproject.niu.edu.tw;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
+//import android.util.Log;
 
 import finalproject.niu.edu.tw.Bloc.Type;
 

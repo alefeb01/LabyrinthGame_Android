@@ -10,7 +10,7 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
-import android.util.Log;
+//import android.util.Log;
 import android.widget.Toast;
 import finalproject.niu.edu.tw.Bloc.Type;
 import android.app.Service;
@@ -32,6 +32,8 @@ public class LabyrinthEngine {
 	public static final int J_SIZE = 22;
 	public static final int MAX_GATE_NUMBER = 5;
 	public static final int MAX_PORTAL_NUMBER = 5;
+	public static final int MAX_WHEEL_NUMBER = 10;
+	protected int tabx = 0;
     private Ball mBall = null;
     public Ball getBall() {
         return getmBall();
@@ -47,6 +49,7 @@ public class LabyrinthEngine {
     private Gate mGates[] = null;
     private Switch mSwitch = null;
     private Laser mLaser = null; 
+    private List<Wheel> mWheel= null;
 
     private LabyrinthActivity mActivity = null;
 
@@ -82,6 +85,9 @@ public class LabyrinthEngine {
                             mActivity.showDialog(LabyrinthActivity.VICTORY_DIALOG);
                             break;
                         case HOLE:
+                            mActivity.showDialog(LabyrinthActivity.DEFEAT_DIALOG);
+                              break;
+                        case HOLE2:
                             mActivity.showDialog(LabyrinthActivity.DEFEAT_DIALOG);
                               break;
                         case PORTAL:
@@ -136,6 +142,8 @@ public class LabyrinthEngine {
           mGates = new Gate[MAX_GATE_NUMBER];
           mSwitch = new Switch();
           setmLaser(new Laser());
+          mWheel = new ArrayList<Wheel>();
+          
     }
 
     // reset ball position
@@ -259,9 +267,15 @@ public class LabyrinthEngine {
                     Gates[bloc.getNum()-1].update();
             }else if((char) c == 't'){
         		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
-                if(mBlocks.get(mBlocks.size()-22).isSolid()==true){mBlocks.get(mBlocks.size()-22).setRebound_Top(true);}    
+                if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}    
                 bloc = new Bloc(Type.TRIGGER, tabi, tabj, REBOUND_0,Character.getNumericValue(reader.read()));   
                 Triggers[bloc.getNum()-1] = bloc;
+            }else if((char) c == 'w') {
+        		if(mBlocks.get(mBlocks.size()-1).isSolid()==true){mBlocks.get(mBlocks.size()-1).setRebound_Right(true);}
+                if(mBlocks.get(mBlocks.size()-J_SIZE).isSolid()==true){mBlocks.get(mBlocks.size()-J_SIZE).setRebound_Top(true);}    
+                bloc = new Bloc(Type.NEUTRAL, tabi, tabj, REBOUND_0);
+                // Create Wheel
+            	mWheel.add(new Wheel(tabi,tabj, Character.getNumericValue(reader.read())));
             }else if ((char) c == '\n') {
               // Change line!
               tabi = -1;
@@ -289,7 +303,10 @@ public class LabyrinthEngine {
           toRemove.clear();
           tabi=0;
           tabj=0;
-
+          for(tabx = 0;tabx < mWheel.size(); tabx++)
+          {
+        	  mBlocks.addAll(mWheel.get(tabx).getSpokes());
+          }
   		  while(Portals[tabi][0][0].getNum()!=-1){
   			mPortals[tabi] = new Portal(Portals[tabi][0],Portals[tabi][1]);
   			tabi++;
@@ -339,6 +356,14 @@ public class LabyrinthEngine {
 
 	public void setmLaser(Laser mLaser) {
 		this.mLaser = mLaser;
+	}
+
+	public List<Wheel> getmWheel() {
+		return mWheel;
+	}
+
+	public void setmWheel(List<Wheel> mWheel) {
+		this.mWheel = mWheel;
 	}
 
 }

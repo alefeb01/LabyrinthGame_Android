@@ -1,7 +1,7 @@
 package finalproject.niu.edu.tw;
 import java.util.List;
 
-import finalproject.niu.edu.tw.Bloc.Type;
+
 
 import android.graphics.Color;
 import android.graphics.RectF;
@@ -10,10 +10,10 @@ import android.graphics.RectF;
 public class Bloc {
 
 	
-    enum  Type { BORDURE, START, ARRIVE, HOLE, NEUTRAL, PORTAL,TRIGGER,GATE,SWITCH};
+    enum  Type { BORDURE, START, ARRIVE, HOLE,HOLE2, NEUTRAL, PORTAL,TRIGGER,GATE,SWITCH};
     
     private float SIZE = Ball.R * 2;
-    
+	protected int tabx = 0; 
     private boolean solid = false;
     private int doorside = 0;
     private boolean Rebound_Top = false;
@@ -65,6 +65,10 @@ public class Bloc {
 	        	this.setSolid(true);
 	        	break;
 	        case HOLE:
+	        	this.mCouleur = Color.GREEN;
+	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
+	        	break;
+	        case HOLE2:
 	        	this.mCouleur = Color.GREEN;
 	        	this.mRectangle = new RectF(pX * SIZE, pY * SIZE, (pX + 1) * SIZE, (pY + 1) * SIZE); 
 	        	break;
@@ -150,9 +154,9 @@ public class Bloc {
 	public int lenght(Bloc[] b)
 	{
 		int count = 0;
-		for (int i=0; i<b.length; i++)
+		for (tabx=0; tabx<b.length; tabx++)
 		{
-			if(b[i].getNum()!=-1){
+			if(b[tabx].getNum()!=-1){
 				count++;
 			}
 		}
