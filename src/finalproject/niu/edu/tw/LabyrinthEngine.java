@@ -33,6 +33,7 @@ public class LabyrinthEngine {
 	public static final int MAX_GATE_NUMBER = 5;
 	public static final int MAX_PORTAL_NUMBER = 5;
 	public static final int MAX_WHEEL_NUMBER = 10;
+	private boolean pause = true;
 	protected int tabx = 0;
     private Ball mBall = null;
     public Ball getBall() {
@@ -154,11 +155,13 @@ public class LabyrinthEngine {
     // stop captor
     public void stop() {
         mManager.unregisterListener(mSensorEventListener, mAccelerometre);
+        pause = true;
     }
 
     // resume captor
     public void resume() {
         mManager.registerListener(mSensorEventListener, mAccelerometre, SensorManager.SENSOR_DELAY_GAME);
+        pause = false;
     }
     
     // construct 
@@ -364,6 +367,14 @@ public class LabyrinthEngine {
 
 	public void setmWheel(List<Wheel> mWheel) {
 		this.mWheel = mWheel;
+	}
+
+	public boolean isPause() {
+		return pause;
+	}
+
+	public void setPause(boolean pause) {
+		this.pause = pause;
 	}
 
 }

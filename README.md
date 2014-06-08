@@ -28,6 +28,10 @@
 	v2.5
 	OOP : Wheel (death wheel)
 	bug : when the speed of the ball is too high it can go through the walls...
+	bu2 :Moving objects don't stop during pause...
+	v2.5.1
+	no more warning
+	bug2 fixed
 	
     LabX.txt
     s = start bloc

@@ -369,11 +369,12 @@ public class LabyrinthActivity extends Activity {
     private Runnable runnable = new Runnable() {
         public void run() {
         	tictimer = (tictimer+1) % 150;
-        	for(Wheel w: mEngine.getmWheel() )
-        	{
-        		w.run_WheelMvmt();
+        	if(!mEngine.isPause()){
+	        	for(Wheel w: mEngine.getmWheel() )
+	        	{
+	        		w.run_WheelMvmt();
+	        	}
         	}
-        	
         	if(tictimer % 50 == 0){
         		//Modif Affichage Life + time
         		run_TimeLife_update();  
