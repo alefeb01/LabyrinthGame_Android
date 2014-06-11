@@ -6,15 +6,19 @@ import java.io.IOException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.text.format.Time;
+import android.util.Log;
 //import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -61,11 +65,19 @@ public class MapActivity extends Activity {
     private int iTime_since;
     private long lTime_sec;
     private int iTime_Life;
-
+    private PowerManager pm;
+    private boolean bSound;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        pm =(PowerManager) getSystemService(MapActivity.POWER_SERVICE);
+        // initialize receiver
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        BroadcastReceiver mReceiver = new ScreenReceiver();
+        registerReceiver(mReceiver, filter);
+        
         settings = getSharedPreferences(PREFS_NAME, 0);
         editor = settings.edit();
         setWorld_number();
@@ -76,7 +88,7 @@ public class MapActivity extends Activity {
         player = MediaPlayer.create(this, R.raw.piano); 
         player.setLooping(true); // Set looping 
         player.setVolume(10,10); 
-        if(player.isPlaying()==false){ player.start(); }
+     
 	    // call in oncreate()
 	    handlerTime.postDelayed(runnable, 1000); //1sec
 
@@ -97,6 +109,7 @@ public class MapActivity extends Activity {
         TextView tMenu = new TextView(this);
 
         getsetup();
+        if(player.isPlaying()==false&&bSound){ player.start(); }
         //END GAME
         bLeaveGameButton.setWidth(300);
         bLeaveGameButton.setText("Leave Game");
@@ -136,10 +149,19 @@ public class MapActivity extends Activity {
         	// change music status
         	  if(player.isPlaying()==true)
         	  {
-        		  player.stop();
-        	  }else{ player.reset();player = MediaPlayer.create(MapActivity.this, R.raw.piano);
-              player.setLooping(true); // Set looping 
-              player.setVolume(10,10); player.start() ;}
+        		  bSound=!bSound;
+        		  player.stop();	        
+        		  editor.putString("SOUND", Boolean.toString(bSound));
+      	          editor.commit();
+        	  }else{ 
+        		  bSound=!bSound;
+        		  editor.putString("SOUND", Boolean.toString(bSound));
+      	          editor.commit();
+        		  player.reset();
+        		  player = MediaPlayer.create(MapActivity.this, R.raw.piano);
+        		  player.setLooping(true); // Set looping 
+        		  player.setVolume(10,10); player.start() ;
+        		  }
           }
         });
         //Menu Text
@@ -177,14 +199,37 @@ public class MapActivity extends Activity {
     
     @Override
     protected void onResume() {
-        super.onResume();
         updateLvlUp();
         getsetup();
+        // only when screen turns on
+        if (!ScreenReceiver.wasScreenOn) {
+            // this is when onResume() is called due to a screen state change
+        	if(bSound){
+  		  MapActivity.player.reset();
+  		  MapActivity.player = MapActivity.player_copie;
+  		  MapActivity.player.setLooping(true); // Set looping 
+  		  MapActivity. player.setVolume(10,10); MapActivity.player.start() ;
+        	}
+            Log.i("LOG","SCREEN TURNED ON");
+        } else {
+            // this is when onResume() is called when the screen state has not changed
+        }
+        super.onResume();
+
 
     } 
 
     @Override
     protected void onPause() {
+    	// when the screen is about to turn off
+    	// Use the PowerManager to see if the screen is turning off
+    	if (pm.isScreenOn() == false) {
+    		if(MapActivity.player.isPlaying()){MapActivity.player.stop();}
+    	// this is the case when onPause() is called by the system due to the screen turning off
+    	Log.i("LOG","SCREEN TURNED OFF");
+    	} else {
+    	// this is when onPause() is called when the screen has not turned off
+    	}
         super.onStop();
     }
     @Override
@@ -263,6 +308,17 @@ public class MapActivity extends Activity {
         	iCurrentLvl = Integer.parseInt(settings.getString("CURRENT_LVL", ""));
         }
         
+        //Get the current Life!
+	    if(!settings.contains("SOUND")){ 
+	    	bSound = true;
+	        editor.putString("SOUND", Boolean.toString(bSound));
+	        editor.commit();
+	    }
+	    else{
+	    	
+	      	bSound = Boolean.parseBoolean(settings.getString("SOUND", ""));
+	    }
+	    
         //Get the current Life!
 	    if(!settings.contains("LIFE")){ 
 	    	

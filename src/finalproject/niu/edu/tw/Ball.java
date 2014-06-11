@@ -12,7 +12,7 @@ public class Ball {
     public static final int R = 15;
     public static final int FILTER_BOUND_LIMIT = R*(R+1);
     // Color
-    private int mCouleur = Color.GREEN;
+    private int mCouleur = Color.RED;
     public int getCouleur() {
         return mCouleur;
     }

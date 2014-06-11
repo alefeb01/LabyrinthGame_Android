@@ -7,14 +7,18 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.text.format.Time;
+import android.util.Log;
 //import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -69,11 +73,17 @@ public class LabyrinthActivity extends Activity {
     private int iTime_since;
     private long lTime_sec;
     private int iTime_Life;
-
+    private PowerManager pm;
+    private boolean bSound;
 //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // initialize receiver
+        pm =(PowerManager) getSystemService(MapActivity.POWER_SERVICE);
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
         
         intent = this.getIntent();
         bundle = intent.getExtras();
@@ -91,6 +101,18 @@ public class LabyrinthActivity extends Activity {
         {
         	iCurrentLvl = Integer.parseInt(settings.getString("CURRENT_LVL", ""));
         }
+        
+        //Get the current Life!
+	    if(!settings.contains("SOUND")){ 
+	    	bSound = true;
+	        editor.putString("SOUND", Boolean.toString(bSound));
+	        editor.commit();
+	    }
+	    else{
+	    	
+	      	bSound = Boolean.parseBoolean(settings.getString("SOUND", ""));
+	    }
+	    
         //Get the current Life!
 	    if(!settings.contains("LIFE")){ 
 	    	
@@ -251,6 +273,29 @@ public class LabyrinthActivity extends Activity {
 
     @Override
     protected void onResume() {
+	    if(!settings.contains("SOUND")){ 
+	    	bSound = true;
+	        editor.putString("SOUND", Boolean.toString(bSound));
+	        editor.commit();
+	    }
+	    else{
+	    	
+	      	bSound = Boolean.parseBoolean(settings.getString("SOUND", ""));
+	    }
+        // only when screen turns on
+        if (!ScreenReceiver.wasScreenOn) {
+            // this is when onResume() is called due to a screen state change
+        	
+        	if(bSound){
+  		  MapActivity.player.reset();
+  		  MapActivity.player = MapActivity.player_copie;
+  		  	MapActivity.player.setLooping(true); // Set looping 
+  		  	MapActivity. player.setVolume(10,10); MapActivity.player.start() ;
+        	}
+            Log.i("LOG","SCREEN TURNED ON");
+        } else {
+            // this is when onResume() is called when the screen state has not changed
+        }
         super.onResume();
         mEngine.stop();
 
@@ -258,6 +303,16 @@ public class LabyrinthActivity extends Activity {
 
     @Override
     protected void onPause() {
+ 
+    	// when the screen is about to turn off
+    	// Use the PowerManager to see if the screen is turning off
+    	if (pm.isScreenOn() == false) {
+    	// this is the case when onPause() is called by the system due to the screen turning off
+    		if(MapActivity.player.isPlaying()){MapActivity.player.stop();}
+    	Log.i("LOG","SCREEN TURNED OFF");
+    	} else {
+    	// this is when onPause() is called when the screen has not turned off
+    	}
         super.onStop();
         mEngine.stop();
     }
@@ -378,7 +433,7 @@ public class LabyrinthActivity extends Activity {
         	if(tictimer % 50 == 0){
         		//Modif Affichage Life + time
         		run_TimeLife_update();  
-        		if(tictimer %150 == 0){
+        		if(tictimer %150 == 0&&!mEngine.isPause()){
         			mEngine.getmLaser().run_ChangeStatus();
         		}
         	}
